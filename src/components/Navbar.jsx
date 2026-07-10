@@ -14,16 +14,14 @@ function Navbar() {
       const res = await api.get('/alerts');
       setOpenAlertCount(res.data.alerts.filter((a) => a.status === 'Open').length);
     } catch (err) {
-      // silently ignore — bell just won't update this cycle
+      // silently ignore
     }
   };
 
   useEffect(() => {
     fetchAlertCount();
-
     socket.on('newAlert', fetchAlertCount);
     socket.on('alertUpdated', fetchAlertCount);
-
     return () => {
       socket.off('newAlert', fetchAlertCount);
       socket.off('alertUpdated', fetchAlertCount);
@@ -40,29 +38,44 @@ function Navbar() {
   return (
     <nav className="bg-vantaraGreen text-white px-8 py-4 flex justify-between items-center shadow">
       <div className="flex items-center">
-        <div className="font-bold text-lg cursor-pointer" onClick={() => navigate('/dashboard')}>
+        <div
+          className="font-bold text-lg cursor-pointer"
+          onClick={() => navigate('/dashboard')}
+          title="Go to Dashboard"
+        >
           🐘 Vantara AI Guardian
         </div>
 
-        <button onClick={() => navigate('/scan')} className="text-sm text-white/80 hover:text-white ml-4">
+        <button
+          onClick={() => navigate('/scan')}
+          className="text-sm text-white/80 hover:text-white ml-4"
+          title="Scan an animal's QR code"
+        >
           📷 Scan
         </button>
 
         {hasRole('SuperAdmin', 'Veterinarian') && (
-          <button onClick={() => navigate('/rescue')} className="text-sm text-white/80 hover:text-white ml-4">
+          <button
+            onClick={() => navigate('/rescue')}
+            className="text-sm text-white/80 hover:text-white ml-4"
+            title="Report or view rescue cases"
+          >
             🚑 Rescue
           </button>
         )}
 
         {hasRole('SuperAdmin', 'ManagementViewer', 'Veterinarian') && (
-          <button onClick={() => navigate('/analytics')} className="text-sm text-white/80 hover:text-white ml-4">
+          <button
+            onClick={() => navigate('/analytics')}
+            className="text-sm text-white/80 hover:text-white ml-4"
+            title="View sanctuary-wide analytics"
+          >
             📊 Analytics
           </button>
         )}
       </div>
 
-       <div className="flex items-center gap-4">
-        {/* ❓ Help */}
+      <div className="flex items-center gap-4">
         <button
           onClick={() => navigate('/help')}
           className="text-white/80 hover:text-white"
@@ -71,11 +84,10 @@ function Navbar() {
           ❓
         </button>
 
-        {/* 🔔 Notification Bell */}
         <button
           onClick={() => navigate('/alerts')}
           className="relative text-white/90 hover:text-white"
-          title="View AI Alerts"
+          title="View AI Health Alerts"
         >
           <span className="text-xl">🔔</span>
           {openAlertCount > 0 && (
@@ -86,13 +98,14 @@ function Navbar() {
         </button>
 
         {user && (
-          <span className="text-sm text-white/80">
+          <span className="text-sm text-white/80" title={`Logged in as ${user.role}`}>
             {user.name} <span className="text-white/50">· {user.role}</span>
           </span>
         )}
         <button
           onClick={handleLogout}
           className="bg-white/10 hover:bg-white/20 text-sm px-4 py-1.5 rounded-lg transition"
+          title="Sign out of your account"
         >
           Logout
         </button>
