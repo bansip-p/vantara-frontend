@@ -13,6 +13,7 @@ import AlertsPage from './pages/Alerts';
 import ProtectedRoute from './components/ProtectedRoute';
 import Toast from './components/Toast';
 import socket from './services/socket';
+import Help from './pages/Help';
 
 function App() {
   const [toasts, setToasts] = useState([]);
@@ -52,6 +53,7 @@ function App() {
         <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
         <Route path="/rescue" element={<ProtectedRoute><RescueAssistant /></ProtectedRoute>} />
         <Route path="/alerts" element={<ProtectedRoute><AlertsPage /></ProtectedRoute>} />
+        <Route path="/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

@@ -61,6 +61,14 @@ function Navbar() {
         )}
       </div>
 
+        <button
+          onClick={() => navigate('/help')}
+          className="text-white/80 hover:text-white"
+          title="Help & User Guide"
+        >
+          ❓
+        </button>
+
       <div className="flex items-center gap-4">
         {/* 🔔 Notification Bell */}
         <button
