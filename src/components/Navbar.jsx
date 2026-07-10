@@ -61,6 +61,8 @@ function Navbar() {
         )}
       </div>
 
+       <div className="flex items-center gap-4">
+        {/* ❓ Help */}
         <button
           onClick={() => navigate('/help')}
           className="text-white/80 hover:text-white"
@@ -69,7 +71,6 @@ function Navbar() {
           ❓
         </button>
 
-      <div className="flex items-center gap-4">
         {/* 🔔 Notification Bell */}
         <button
           onClick={() => navigate('/alerts')}
