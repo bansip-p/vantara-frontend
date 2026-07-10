@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid, Treemap } from 'recharts';
 import api from '../services/api';
 
 const STATUS_COLORS = {
@@ -16,7 +16,10 @@ const RISK_COLORS = {
   High: '#DC2626',
 };
 
-const SPECIES_GRADIENT = ['#1B4332', '#215A44', '#2D6A4F', '#40826D', '#52A788', '#74C69D'];
+const SPECIES_GRADIENT = [
+  '#1B4332', '#D4A017', '#2D6A4F', '#B7791F', '#40826D', '#996515',
+  '#52A788', '#8B6914', '#74C69D', '#C9982E', '#1E4D3A', '#DDA53A',
+];
 
 function Analytics() {
   const [data, setData] = useState(null);
@@ -61,23 +64,16 @@ function Analytics() {
           <StatCard icon="🚨" label="Critical Alerts" value={data.criticalAlerts} color="#DC2626" />
         </div>
 
-        {/* Species Distribution */}
-        <Card title="Species Distribution" subtitle={`${speciesData.length} species tracked`}>
-          <ResponsiveContainer width="100%" height={520}>
-            <BarChart data={speciesData} layout="vertical" margin={{ left: 10, right: 30 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#eee" />
-              <XAxis type="number" allowDecimals={false} tick={{ fontSize: 12, fill: '#888' }} axisLine={{ stroke: '#ddd' }} />
-              <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 12, fill: '#444' }} axisLine={{ stroke: '#ddd' }} />
-              <Tooltip
-                cursor={{ fill: '#f5f5f5' }}
-                contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 13 }}
-              />
-              <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={16}>
-                {speciesData.map((_, index) => (
-                  <Cell key={index} fill={SPECIES_GRADIENT[index % SPECIES_GRADIENT.length]} />
-                ))}
-              </Bar>
-            </BarChart>
+        {/* Species Distribution — Treemap */}
+        <Card title="Species Distribution" subtitle={`${speciesData.length} species tracked · block size reflects population`}>
+          <ResponsiveContainer width="100%" height={420}>
+            <Treemap
+              data={speciesData}
+              dataKey="value"
+              nameKey="name"
+              stroke="#fff"
+              content={<TreemapCell />}
+            />
           </ResponsiveContainer>
         </Card>
 
@@ -157,6 +153,47 @@ function Legend({ items }) {
         </div>
       ))}
     </div>
+  );
+}
+
+function TreemapCell({ x, y, width, height, name, value, index }) {
+  const fill = SPECIES_GRADIENT[index % SPECIES_GRADIENT.length];
+  const showLabel = width > 60 && height > 30;
+
+  return (
+    <g>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        style={{ fill, stroke: '#fff', strokeWidth: 2 }}
+      />
+      {showLabel && (
+        <>
+          <text
+            x={x + width / 2}
+            y={y + height / 2 - 6}
+            textAnchor="middle"
+            fill="#fff"
+            fontSize={12}
+            fontWeight={600}
+          >
+            {name}
+          </text>
+          <text
+            x={x + width / 2}
+            y={y + height / 2 + 12}
+            textAnchor="middle"
+            fill="#fff"
+            fontSize={11}
+            opacity={0.85}
+          >
+            {value}
+          </text>
+        </>
+      )}
+    </g>
   );
 }
 
