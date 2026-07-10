@@ -30,24 +30,25 @@ function Analytics() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Species Pie Chart */}
-        <div className="bg-white rounded-xl shadow p-6">
+       {/* Species Bar Chart */}
+        <div className="bg-white rounded-xl shadow p-6 lg:col-span-2">
           <h2 className="text-sm font-semibold text-gray-600 mb-4">Species Distribution</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie data={speciesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                {speciesData.map((entry, index) => (
-                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
+          <ResponsiveContainer width="100%" height={500}>
+            <BarChart
+              data={[...speciesData].sort((a, b) => b.value - a.value)}
+              layout="vertical"
+              margin={{ left: 40 }}
+            >
+              <XAxis type="number" allowDecimals={false} />
+              <YAxis type="category" dataKey="name" width={140} tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Legend />
-            </PieChart>
+              <Bar dataKey="value" fill="#1B4332" radius={[0, 4, 4, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Status Bar Chart */}
-        <div className="bg-white rounded-xl shadow p-6">
+        <div className="bg-white rounded-xl shadow p-6 lg:col-span-1">
           <h2 className="text-sm font-semibold text-gray-600 mb-4">Animals by Status</h2>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={statusData}>
