@@ -66,7 +66,7 @@ function Analytics() {
 
         {/* Species Distribution — Treemap */}
         <Card title="Species Distribution" subtitle={`${speciesData.length} species tracked · block size reflects population`}>
-          <ResponsiveContainer width="100%" height={420}>
+          <ResponsiveContainer width="100%" height={480}>
             <Treemap
               data={speciesData}
               dataKey="value"
@@ -156,43 +156,48 @@ function Legend({ items }) {
   );
 }
 
+function truncateText(text, maxChars) {
+  if (text.length <= maxChars) return text;
+  return text.slice(0, maxChars - 1) + '…';
+}
+
 function TreemapCell({ x, y, width, height, name, value, index }) {
   const fill = SPECIES_GRADIENT[index % SPECIES_GRADIENT.length];
-  const showLabel = width > 60 && height > 30;
+
+  if (width < 45 || height < 35) {
+    return (
+      <rect x={x} y={y} width={width} height={height} style={{ fill, stroke: '#fff', strokeWidth: 2 }} />
+    );
+  }
+
+  const fontSize = width < 90 || height < 55 ? 10 : 12;
+  const approxCharWidth = fontSize * 0.62;
+  const maxChars = Math.floor((width - 12) / approxCharWidth);
+  const displayName = truncateText(name, Math.max(maxChars, 4));
 
   return (
     <g>
-      <rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        style={{ fill, stroke: '#fff', strokeWidth: 2 }}
-      />
-      {showLabel && (
-        <>
-          <text
-            x={x + width / 2}
-            y={y + height / 2 - 6}
-            textAnchor="middle"
-            fill="#fff"
-            fontSize={12}
-            fontWeight={600}
-          >
-            {name}
-          </text>
-          <text
-            x={x + width / 2}
-            y={y + height / 2 + 12}
-            textAnchor="middle"
-            fill="#fff"
-            fontSize={11}
-            opacity={0.85}
-          >
-            {value}
-          </text>
-        </>
-      )}
+      <rect x={x} y={y} width={width} height={height} style={{ fill, stroke: '#fff', strokeWidth: 2 }} />
+      <text
+        x={x + width / 2}
+        y={y + height / 2 - fontSize * 0.4}
+        textAnchor="middle"
+        fill="#fff"
+        fontSize={fontSize}
+        fontWeight={600}
+      >
+        {displayName}
+      </text>
+      <text
+        x={x + width / 2}
+        y={y + height / 2 + fontSize * 0.9}
+        textAnchor="middle"
+        fill="#fff"
+        fontSize={fontSize - 1}
+        opacity={0.85}
+      >
+        {value}
+      </text>
     </g>
   );
 }
