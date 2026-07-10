@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // This is the ONE place our whole app knows where the backend lives
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://vantara-backend-cwtf.onrender.com/api',
 });
 
 // Automatically attach the login "wristband" (token) to every request, if we have one

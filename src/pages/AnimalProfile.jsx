@@ -81,7 +81,7 @@ function AnimalProfile() {
               <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
                 {animal.profileImage ? (
                   <img
-                    src={animal.profileImage.startsWith('http') ? animal.profileImage : `http://localhost:5000${animal.profileImage}`}
+                    src={animal.profileImage.startsWith('http') ? animal.profileImage : `https://vantara-backend-cwtf.onrender.com${animal.profileImage}`}
                     alt={animal.name}
                     className="w-full h-full object-cover"
                   />

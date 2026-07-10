@@ -168,7 +168,7 @@ function Dashboard() {
                 <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
                   {animal.profileImage ? (
                     <img
-                      src={animal.profileImage.startsWith('http') ? animal.profileImage : `http://localhost:5000${animal.profileImage}`}
+                      src={animal.profileImage.startsWith('http') ? animal.profileImage : `https://vantara-backend-cwtf.onrender.com${animal.profileImage}`}
                       alt={animal.name}
                       className="w-full h-full object-cover"
                       onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
