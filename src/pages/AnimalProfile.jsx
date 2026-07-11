@@ -9,6 +9,7 @@ import { hasRole } from '../utils/roleHelpers';
 
 function AnimalProfile() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [animal, setAnimal] = useState(null);
   const [twin, setTwin] = useState(null);
   const [alerts, setAlerts] = useState([]);
