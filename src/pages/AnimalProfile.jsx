@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import api from '../services/api';
 import DietRecommendation from '../components/DietRecommendation';
 import LogObservation from '../components/LogObservation';
 import StoryGenerator from '../components/StoryGenerator';
+import { hasRole } from '../utils/roleHelpers';
 
 function AnimalProfile() {
   const { id } = useParams();
@@ -25,7 +26,19 @@ function AnimalProfile() {
   useEffect(() => {
     fetchProfile();
   }, [id]);
+const handleDelete = async () => {
+    const confirmed = window.confirm(
+      `Are you sure you want to remove ${animal.name}? This will hide the animal from all lists, but its full history will be preserved.`
+    );
+    if (!confirmed) return;
 
+    try {
+      await api.delete(`/animals/${id}`);
+      navigate('/dashboard');
+    } catch (err) {
+      alert('Could not remove this animal.');
+    }
+  };
   const handlePhotoUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -93,10 +106,28 @@ function AnimalProfile() {
                 <h1 className="text-2xl font-bold text-vantaraGreen">{animal.name}</h1>
                 <p className="text-gray-500">{animal.species} <span className="text-gray-400 text-sm">· {animal.scientificName}</span></p>
               </div>
-              <label className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg cursor-pointer">
-                📷 Upload Photo
-                <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
-              </label>
+             <div className="flex flex-col gap-2 items-end">
+                <label className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg cursor-pointer text-center">
+                  📷 Upload Photo
+                  <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+                </label>
+                {hasRole('SuperAdmin', 'Veterinarian') && (
+                  <button
+                    onClick={() => navigate(`/animal/${id}/edit`)}
+                    className="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-3 py-2 rounded-lg"
+                  >
+                    ✏️ Edit
+                  </button>
+                )}
+                {hasRole('SuperAdmin') && (
+                  <button
+                    onClick={handleDelete}
+                    className="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg"
+                  >
+                    🗑️ Remove
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 xs:grid-cols-2 gap-4 sm:gap-6 mb-6">
