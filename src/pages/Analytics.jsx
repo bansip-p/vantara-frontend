@@ -121,8 +121,8 @@ function Analytics() {
 
 function StatCard({ icon, label, value, color }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-      <div className="flex items-center justify-between mb-2">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 text-center">
+      <div className="flex items-center justify-center mb-2">
         <span className="text-2xl">{icon}</span>
       </div>
       <p className="text-xs text-gray-400 mb-1">{label}</p>
@@ -163,24 +163,25 @@ function truncateText(text, maxChars) {
 
 function TreemapCell({ x, y, width, height, name, value, index }) {
   const fill = SPECIES_GRADIENT[index % SPECIES_GRADIENT.length];
+  const area = width * height;
 
-  if (width < 45 || height < 35) {
-    return (
-      <rect x={x} y={y} width={width} height={height} style={{ fill, stroke: '#fff', strokeWidth: 2 }} />
-    );
+  if (area < 700) {
+    return <rect x={x} y={y} width={width} height={height} style={{ fill, stroke: '#fff', strokeWidth: 2 }} />;
   }
 
-  const fontSize = width < 90 || height < 55 ? 10 : 12;
-  const approxCharWidth = fontSize * 0.62;
-  const maxChars = Math.floor((width - 12) / approxCharWidth);
-  const displayName = truncateText(name, Math.max(maxChars, 4));
+  const shortSide = Math.min(width, height);
+  const fontSize = Math.max(8, Math.min(13, Math.floor(shortSide / 4)));
+  const approxCharWidth = fontSize * 0.6;
+  const maxChars = Math.floor((width - 8) / approxCharWidth);
+  const displayName = maxChars < name.length ? name.slice(0, Math.max(maxChars - 1, 3)) + '…' : name;
+  const showValue = height > fontSize * 3;
 
   return (
     <g>
       <rect x={x} y={y} width={width} height={height} style={{ fill, stroke: '#fff', strokeWidth: 2 }} />
       <text
         x={x + width / 2}
-        y={y + height / 2 - fontSize * 0.4}
+        y={y + height / 2 - (showValue ? fontSize * 0.4 : -fontSize * 0.3)}
         textAnchor="middle"
         fill="#fff"
         fontSize={fontSize}
@@ -188,16 +189,18 @@ function TreemapCell({ x, y, width, height, name, value, index }) {
       >
         {displayName}
       </text>
-      <text
-        x={x + width / 2}
-        y={y + height / 2 + fontSize * 0.9}
-        textAnchor="middle"
-        fill="#fff"
-        fontSize={fontSize - 1}
-        opacity={0.85}
-      >
-        {value}
-      </text>
+      {showValue && (
+        <text
+          x={x + width / 2}
+          y={y + height / 2 + fontSize * 0.9}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={fontSize - 1}
+          opacity={0.85}
+        >
+          {value}
+        </text>
+      )}
     </g>
   );
 }

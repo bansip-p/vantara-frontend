@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import socket from '../services/socket';
 import api from '../services/api';
 import { getCurrentUser, hasRole } from '../utils/roleHelpers';
+import Logo from './Logo';
 
 function IconButton({ onClick, label, children }) {
   return (
@@ -54,11 +55,9 @@ function Navbar() {
 
   return (
     <nav className="bg-vantaraGreen text-white shadow relative">
-      <div className="px-4 sm:px-8 py-4 flex justify-between items-center">
+      <div className="px-4 sm:px-6 py-2.5 flex justify-between items-center">
         {/* Logo */}
-        <div className="font-bold text-base sm:text-lg cursor-pointer" onClick={() => goTo('/dashboard')}>
-          🐘 <span className="hidden xs:inline">Vantara AI Guardian</span>
-        </div>
+        <Logo onClick={() => goTo('/dashboard')} />
 
         {/* Desktop nav links — hidden on small screens */}
         <div className="hidden md:flex items-center ml-4">
@@ -99,9 +98,12 @@ function Navbar() {
 
           {/* User name — hidden on small screens to save space */}
           {user && (
-            <span className="hidden lg:inline text-sm text-white/80">
+            <button
+              onClick={() => goTo('/profile')}
+              className="hidden lg:inline text-sm text-white/80 hover:text-white"
+            >
               {user.name} <span className="text-white/50">· {user.role}</span>
-            </span>
+            </button>
           )}
 
           <button
@@ -125,9 +127,12 @@ function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-vantaraGreen border-t border-white/10 px-4 py-3 space-y-1">
           {user && (
-            <p className="text-sm text-white/70 pb-2 border-b border-white/10 mb-2">
-              {user.name} · {user.role}
-            </p>
+            <button
+              onClick={() => goTo('/profile')}
+              className="block w-full text-left text-sm text-white/70 pb-2 border-b border-white/10 mb-2"
+            >
+              {user.name} · {user.role} (edit)
+            </button>
           )}
           <button onClick={() => goTo('/scan')} className="block w-full text-left text-sm text-white/90 py-2">
             📷 Scan

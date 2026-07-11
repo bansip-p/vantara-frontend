@@ -15,6 +15,7 @@ import Toast from './components/Toast';
 import socket from './services/socket';
 import Help from './pages/Help';
 import ScrollToTop from './components/ScrollToTop';
+import Profile from './pages/Profile';
 
 function App() {
   const [toasts, setToasts] = useState([]);
@@ -56,6 +57,7 @@ function App() {
         <Route path="/rescue" element={<ProtectedRoute><RescueAssistant /></ProtectedRoute>} />
         <Route path="/alerts" element={<ProtectedRoute><AlertsPage /></ProtectedRoute>} />
         <Route path="/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

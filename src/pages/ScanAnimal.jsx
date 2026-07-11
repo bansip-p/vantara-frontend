@@ -68,7 +68,7 @@ function ScanAnimal() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center">
+    <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center justify-center">
       <h1 className="text-xl font-bold text-vantaraGreen mb-4">📷 Scan Animal QR Code</h1>
 
       {!cameraStarted && (
