@@ -14,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Toast from './components/Toast';
 import socket from './services/socket';
 import Help from './pages/Help';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const [toasts, setToasts] = useState([]);
@@ -38,8 +39,9 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+     <BrowserRouter>
       <Toast toasts={toasts} />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
