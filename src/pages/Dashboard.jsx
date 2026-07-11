@@ -1,11 +1,10 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import AlertCard from '../components/AlertCard';
 import { hasRole } from '../utils/roleHelpers';
 import socket from '../services/socket';
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE_OPTIONS = [12, 25, 50, 100, 200];
 
 function Dashboard() {
   const [animals, setAnimals] = useState([]);
@@ -18,6 +17,7 @@ function Dashboard() {
   const [speciesFilter, setSpeciesFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(100);
 
   const fetchData = async () => {
     try {
@@ -61,21 +61,16 @@ function Dashboard() {
     });
   }, [animals, searchTerm, speciesFilter, statusFilter]);
 
-  // Reset to page 1 whenever filters change (avoids landing on an empty page)
+  // Reset to page 1 whenever filters or page size change (avoids landing on an empty page)
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, speciesFilter, statusFilter]);
+  }, [searchTerm, speciesFilter, statusFilter, pageSize]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredAnimals.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(filteredAnimals.length / pageSize));
   const paginatedAnimals = filteredAnimals.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
   );
-
-  const handleAcknowledge = async (alertId) => {
-    await api.put(`/alerts/${alertId}/status`, { status: 'Acknowledged' });
-    fetchData();
-  };
 
   const statusColor = {
     Stable: 'bg-green-100 text-green-700',
@@ -86,7 +81,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
         <h1 className="text-xl sm:text-2xl font-bold text-vantaraGreen">🐘 Vantara AI Guardian Dashboard</h1>
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
@@ -104,8 +99,6 @@ function Dashboard() {
 
       {loading && <p className="text-gray-500">Loading...</p>}
       {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-
-  
 
       {/* Search + Filter Bar */}
       <div className="bg-white rounded-xl shadow p-4 mb-6 flex flex-col md:flex-row gap-3">
@@ -191,27 +184,42 @@ function Dashboard() {
       </div>
 
       {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-6">
-          <button
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1.5 text-sm bg-white border rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mt-6">
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <span>Show</span>
+          <select
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+            className="px-2 py-1 border rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-vantaraGold"
           >
-            ← Previous
-          </button>
-          <span className="text-sm text-gray-500 px-3">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1.5 text-sm bg-white border rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
-          >
-            Next →
-          </button>
+            {PAGE_SIZE_OPTIONS.map((size) => (
+              <option key={size} value={size}>{size} per page</option>
+            ))}
+          </select>
         </div>
-      )}
+
+        {totalPages > 1 && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1.5 text-sm bg-white border rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              ← Previous
+            </button>
+            <span className="text-sm text-gray-500 px-3">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1.5 text-sm bg-white border rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              Next →
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

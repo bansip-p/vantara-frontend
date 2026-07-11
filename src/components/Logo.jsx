@@ -1,20 +1,30 @@
 function Logo({ onClick }) {
   return (
-    <div onClick={onClick} className="flex items-center gap-2 cursor-pointer select-none">
-      <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="20" r="19" fill="#D4A017" fillOpacity="0.15" stroke="#D4A017" strokeWidth="1.5" />
+    <div onClick={onClick} className="flex items-center gap-2.5 cursor-pointer select-none">
+      <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+        {/* Outer shield/leaf shape — represents protection + nature */}
         <path
-          d="M13 24c0-5 3-9 7-9s7 4 7 9v2a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 23 26v-2.5"
-          stroke="#F5F5F5"
-          strokeWidth="1.8"
+          d="M24 4 L42 11 V22 C42 33 34.5 41 24 44 C13.5 41 6 33 6 22 V11 Z"
+          fill="#1B4332"
+          stroke="#D4A017"
+          strokeWidth="1.5"
+        />
+        {/* Inner pulse/heartbeat line — represents AI health monitoring */}
+        <path
+          d="M11 24 H17 L20 17 L24 31 L27 24 H37"
+          stroke="#D4A017"
+          strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"
         />
-        <circle cx="17" cy="17" r="1.3" fill="#F5F5F5" />
-        <path d="M12 20c-1.5 0-2.5 1.5-2.5 3" stroke="#F5F5F5" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+        {/* Small paw accent, bottom */}
+        <circle cx="24" cy="36.5" r="1.6" fill="#74C69D" />
       </svg>
-      <span className="font-bold text-base sm:text-lg leading-none">Vantara</span>
+      <div className="leading-tight">
+        <div className="font-bold text-base sm:text-lg text-white">Vantara</div>
+        <div className="hidden sm:block text-[9px] tracking-wider text-white/60 -mt-1">AI GUARDIAN</div>
+      </div>
     </div>
   );
 }
