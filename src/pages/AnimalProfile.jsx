@@ -77,7 +77,7 @@ function AnimalProfile() {
 
           {/* Header Card */}
           <div className="bg-white rounded-xl shadow p-8">
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6 text-center sm:text-left">
               <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
                 {animal.profileImage ? (
                   <img
@@ -99,7 +99,7 @@ function AnimalProfile() {
               </label>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-4 sm:gap-6 mb-6">
               <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <p className="text-sm text-gray-500">Digital Health Score</p>
                 <p className={`text-4xl font-bold ${scoreColor}`}>{twin.healthScore}%</p>

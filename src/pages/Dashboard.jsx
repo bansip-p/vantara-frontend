@@ -87,9 +87,9 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-vantaraGreen">🐘 Vantara AI Guardian Dashboard</h1>
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-vantaraGreen">🐘 Vantara AI Guardian Dashboard</h1>
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           <span className="text-sm text-gray-500">{animals.length} Animals · {alerts.length} Open Alerts</span>
           {hasRole('SuperAdmin', 'Veterinarian') && (
             <button
