@@ -6,6 +6,7 @@ import DietRecommendation from '../components/DietRecommendation';
 import LogObservation from '../components/LogObservation';
 import StoryGenerator from '../components/StoryGenerator';
 import { hasRole } from '../utils/roleHelpers';
+import MedicalRecords from '../components/MedicalRecords';
 
 const BACKEND_URL = 'https://vantara-backend-cwtf.onrender.com';
 
@@ -261,7 +262,9 @@ function AnimalProfile() {
                 </div>
               </div>
 
-              <LogObservation animalId={id} onUpdated={(updatedTwin) => setTwin(updatedTwin)} />
+             <LogObservation animalId={id} onUpdated={(updatedTwin) => setTwin(updatedTwin)} />
+
+              <MedicalRecords animalId={id} />
             </div>
           )}
 
