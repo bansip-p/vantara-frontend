@@ -1,5 +1,14 @@
 import { hasRole } from '../utils/roleHelpers';
 
+const typeIcon = {
+    'Health Prediction': '💓',
+    'Behavior': '👁️',
+    'Medicine Overdue': '💊',
+    'Checkup Overdue': '📅',
+    'Diet': '🥗',
+    'Medical': '🩺',
+  };
+
 function AlertCard({ alert, onAcknowledge }) {
   const severityStyles = {
     Info: 'border-blue-300 bg-blue-50',
@@ -18,7 +27,7 @@ function AlertCard({ alert, onAcknowledge }) {
       <div className="flex justify-between items-start">
         <div>
           <p className={`text-xs font-bold uppercase ${severityText[alert.severity]}`}>
-            {alert.severity} · {alert.alertType}
+            {alert.severity} · {typeIcon[alert.alertType] || ''} {alert.alertType}
           </p>
           <p className="font-semibold text-gray-800 mt-1">
             {alert.animalId?.name} <span className="text-gray-400 font-normal">({alert.animalId?.species})</span>
