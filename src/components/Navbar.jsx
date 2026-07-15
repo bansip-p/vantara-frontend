@@ -74,6 +74,11 @@ function Navbar() {
               📊 Analytics
             </button>
           )}
+          {hasRole('SuperAdmin', 'Veterinarian', 'Keeper') && (
+            <button onClick={() => navigate('/inventory')} className="text-sm text-white/80 hover:text-white ml-4">
+              📦 Inventory
+            </button>
+          )}
         </div>
 
         {/* Right side: always visible */}
@@ -145,6 +150,11 @@ function Navbar() {
           {hasRole('SuperAdmin', 'ManagementViewer', 'Veterinarian') && (
             <button onClick={() => goTo('/analytics')} className="block w-full text-left text-sm text-white/90 py-2">
               📊 Analytics
+            </button>
+          )}
+          {hasRole('SuperAdmin', 'Veterinarian', 'Keeper') && (
+            <button onClick={() => goTo('/inventory')} className="block w-full text-left text-sm text-white/90 py-2">
+              📦 Inventory
             </button>
           )}
           <button onClick={handleLogout} className="block w-full text-left text-sm text-white/90 py-2 border-t border-white/10 mt-2 pt-3">

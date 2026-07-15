@@ -17,6 +17,7 @@ import Help from './pages/Help';
 import ScrollToTop from './components/ScrollToTop';
 import Profile from './pages/Profile';
 import EditAnimal from './pages/EditAnimal';
+import Inventory from './pages/Inventory';
 
 function App() {
   const [toasts, setToasts] = useState([]);
@@ -60,6 +61,7 @@ function App() {
         <Route path="/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/animal/:id/edit" element={<ProtectedRoute><EditAnimal /></ProtectedRoute>} />
+        <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
