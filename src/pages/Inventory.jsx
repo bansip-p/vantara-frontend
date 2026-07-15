@@ -103,10 +103,10 @@ function AddItemForm({ onCreated, onCancel }) {
   };
 
   return (
-    <form onSubmit={submit} className="bg-white rounded-xl shadow p-6 mb-6 space-y-3">
+    <form onSubmit={submit} className="bg-white rounded-xl shadow p-4 sm:p-6 mb-6 space-y-3">
       <h2 className="text-sm font-semibold text-gray-600 mb-2">➕ Add Inventory Item</h2>
       {error && <p className="text-xs text-red-600">{error}</p>}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         <div>
           <label className="text-xs text-gray-500 block mb-1">Name</label>
           <input
@@ -164,7 +164,7 @@ function AddItemForm({ onCreated, onCancel }) {
           />
         </div>
       </div>
-      <div className="flex gap-2 pt-2">
+      <div className="flex flex-wrap gap-2 pt-2">
         <button
           type="submit"
           disabled={busy}
@@ -210,21 +210,21 @@ function Inventory() {
   const lowStockCount = items.filter((i) => i.quantity <= i.lowStockThreshold).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-vantaraGreen">📦 Inventory</h1>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8 overflow-x-hidden">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-vantaraGreen">📦 Inventory</h1>
         <span className="text-sm text-gray-500">
           {lowStockCount > 0 ? `⚠️ ${lowStockCount} Low Stock · ` : ''}{items.length} Total Items
         </span>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
           {CATEGORIES.map((c) => (
             <button
               key={c}
               onClick={() => setCategoryFilter(c)}
-              className={`text-sm px-4 py-2 rounded-lg font-medium transition ${
+              className={`text-sm px-4 py-2 rounded-lg font-medium transition whitespace-nowrap flex-shrink-0 ${
                 categoryFilter === c
                   ? 'bg-vantaraGreen text-white'
                   : 'bg-white text-gray-600 border hover:bg-gray-50'
@@ -236,7 +236,7 @@ function Inventory() {
         </div>
         <button
           onClick={() => setShowAddForm((v) => !v)}
-          className="text-sm font-medium px-4 py-2 rounded-lg bg-vantaraGreen text-white hover:opacity-90"
+          className="text-sm font-medium px-4 py-2 rounded-lg bg-vantaraGreen text-white hover:opacity-90 w-full sm:w-auto"
         >
           {showAddForm ? 'Close' : '+ Add Item'}
         </button>
@@ -271,21 +271,21 @@ function Inventory() {
               }`}
             >
               <div
-                className="flex justify-between items-center cursor-pointer"
+                className="flex justify-between items-center cursor-pointer gap-2"
                 onClick={() => setExpandedId(expandedId === item._id ? null : item._id)}
               >
-                <div>
-                  <p className="text-sm font-semibold text-gray-800">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-gray-800 truncate">
                     {item.name}{' '}
                     <span className="text-xs font-normal text-gray-400">· {item.category}</span>
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 mt-1 break-words">
                     {item.quantity}{item.unit} in stock
                     {isLow && <span className="text-amber-600 font-medium"> · Low stock (threshold {item.lowStockThreshold}{item.unit})</span>}
                   </p>
-                  {item.supplier && <p className="text-xs text-gray-400 mt-0.5">Supplier: {item.supplier}</p>}
+                  {item.supplier && <p className="text-xs text-gray-400 mt-0.5 truncate">Supplier: {item.supplier}</p>}
                 </div>
-                <span className="text-gray-400 text-sm">{expandedId === item._id ? '▲' : '▼'}</span>
+                <span className="text-gray-400 text-sm flex-shrink-0">{expandedId === item._id ? '▲' : '▼'}</span>
               </div>
 
               {expandedId === item._id && (
