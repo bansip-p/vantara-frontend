@@ -171,9 +171,12 @@ function Dashboard() {
       {/* Critical Animals quick-list */}
       {criticalAnimals.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-xl shadow p-4 mb-6">
-          <p className="text-sm font-semibold text-red-700 mb-2">🚨 Critical Animals Needing Attention</p>
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm font-semibold text-red-700">🚨 Critical Animals Needing Attention</p>
+            <span className="text-xs text-red-600">{criticalAnimals.length} total</span>
+          </div>
           <div className="flex flex-wrap gap-2">
-            {criticalAnimals.map((animal) => (
+            {criticalAnimals.slice(0, 10).map((animal) => (
               <button
                 key={animal._id}
                 onClick={() => navigate(`/animal/${animal._id}`)}
@@ -182,6 +185,19 @@ function Dashboard() {
                 {animal.name} · {animal.species}
               </button>
             ))}
+            {criticalAnimals.length > 10 && (
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setSpeciesFilter('All');
+                  setStatusFilter('Critical');
+                  document.getElementById('animals-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-xs bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition font-medium"
+              >
+                View all {criticalAnimals.length} →
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -223,7 +239,7 @@ function Dashboard() {
         )}
       </div>
 
-      <div className="flex justify-between items-center mb-3">
+      <div id="animals-section" className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold text-gray-700">
           Animals <span className="text-sm font-normal text-gray-400">({filteredAnimals.length} matching)</span>
         </h2>
